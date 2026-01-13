@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Track Your Habits</h1>
+<div class="controls" style="text-align:center; margin-bottom:20px;">
+    <input type="text" id="global-comment" placeholder="Optional comment..." style="padding:10px;">
+    <select id="global-interval" style="padding:10px;">
+        <option value="">Default Interval</option>
+        {% for mins in [1, 3, 5, 10, 15, 20, 30, 40, 50, 60] %}<option value="{{ mins }}">{{ mins }} mins</option>{% endfor %}
+    </select>
+</div>
+
+<div id="flash" style="display:none; background:#d4edda; padding:10px; margin-bottom:20px; text-align:center; border-radius:5px;">Habit Logged!</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">
+    {% for habit in habits %}
+    <div onclick="logHabit({{ habit.id }})" style="background:white; padding:20px; border-radius:10px; text-align:center; cursor:pointer; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+        <div style="font-size: 2rem;">{{ habit.icon }}</div>
+        <strong>{{ habit.title }}</strong>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    window.logHabit = async function(id) {
+        const comment = document.getElementById('global-comment').value;
+        const interval = document.getElementById('global-interval').value;
+        
+        // IMPORTANT: We prefix with window.INGRESS_PATH
+        const response = await fetch(`${window.INGRESS_PATH}/api/log`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ habit_id: id, comment, interval })
+        });
+
+        if (response.ok) {
+            const el = document.getElementById('flash');
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 2000);
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Habit Tracker</title>
+    <link rel="stylesheet" href="{{ root_path }}{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        // Global variable for JS to use when fetching APIs
+        window.INGRESS_PATH = "{{ root_path }}";
+    </script>
+</head>
+<body style="background: #f4f7f6; font-family: sans-serif; padding: 20px;">
+<nav style="margin-bottom: 20px; text-align: center;">
+    <a href="{{ root_path }}{{ url_for('index') }}">Dashboard</a> | 
+    <a href="{{ root_path }}{{ url_for('report') }}">Reports</a> | 
+    <a href="{{ root_path }}{{ url_for('maintenance') }}">Maintenance</a>
+</nav>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
