@@ -47,6 +47,34 @@ The add-on requires no configuration options. It automatically:
 - Configures ingress for web access
 - Runs on port 5000 internally
 
+### Logging Habits via Home Assistant
+
+Add the following custom `rest_command` to your `/homeassistant/configuration.yaml` (This makes it easier to call the API)
+
+```
+rest_command:
+  log_habit:
+    url: "http://local-habit-tracker:5000/api/log"
+    method: POST
+    content_type: "application/json"
+    payload: '{"habit_id": {{ habit_id }}, "comment": "{{ comment }}", "interval": {{ interval }} }'
+```
+
+Then to use the above in a script in HomeAssistant you can do something like this:
+
+```
+sequence:
+  - action: rest_command.log_habit
+    data:
+      habit_id: 1
+      comment: null
+      interval: 1
+alias: habit_log_coffee
+description: ""
+```
+
+You can then easily call this script from buttons, Android HomeAssistant Widgets or from other devices / hardware buttons.
+
 ## Local Development/Running
 
 If you want to run this outside of HomeAssistant:
